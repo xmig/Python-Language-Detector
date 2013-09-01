@@ -24,15 +24,14 @@ LanguageSample::LanguageSample(LanguageDatabase *languageDatabase, const char *s
 		return;
 	
 	// Convert sample to UCS-4 (UTF-32)
-	int length = strlen(sampleText);
+	int length = (int)strlen(sampleText);
 	if (length <= 3)
 		return;
 	if (length > MaxInputLength)
 		length = MaxInputLength;
 	wchar_t *widesample = new wchar_t[length];
 	memset(widesample, 0, sizeof(wchar_t)*length);
-	size_t wide_string_size; 
-	wide_string_size = utf8_to_wchar(sampleText, length, widesample, sizeof(wchar_t) * length, 0);
+	utf8_to_wchar(sampleText, length, widesample, sizeof(wchar_t) * length, 0);
 	widesample[length - 1] = 0;
 
 	// Split sample into trigrams
@@ -128,7 +127,7 @@ LanguageSample::~LanguageSample()
 		return;
 	
 	TriGram *current = Trigrams;
-	TriGram *next = current->next;
+	TriGram *next;
 	while (current) {
 		next = current->next;
 		delete current;
