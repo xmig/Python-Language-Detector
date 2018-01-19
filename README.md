@@ -1,6 +1,9 @@
 Python Language Detector
 ========================
 
+Python 3.5 version
+
+
 Trigram-based language detection built in C++ and wrapped as a python module.
 
 Built for speed and reliability as primary concerns, with some small accuracy sacrifices vs. similar algorithms. For the purpose it was built for, the accuracy still remains very high for even short sample texts.
