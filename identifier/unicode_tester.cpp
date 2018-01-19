@@ -102,7 +102,7 @@ const char *UnicodeTester::GetLanguage()
 
 const char *UnicodeTester::GetLanguageByCode(unsigned int languageCode) const
 {
-	if (languageCode < 0 || languageCode >= UT_TOTAL_LANGUAGES)
+	if (languageCode >= UT_TOTAL_LANGUAGES)
 		return 0;
 	
 	if (languageCode == UT_JAPANESE) {

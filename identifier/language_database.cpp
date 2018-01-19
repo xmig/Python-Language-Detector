@@ -34,7 +34,7 @@ LanguageDatabase::~LanguageDatabase(void)
 	for (i = 0; i < LANGUAGE_DATABASE_HASH_TABLE_SIZE; i++)	{
 		if (HashTable[i]) {
 			TriGram *current = HashTable[i];
-			TriGram *next = current->next;
+			TriGram *next;
 			while (current) {
 				next = current->next;
 				delete current;
@@ -61,10 +61,14 @@ bool LanguageDatabase::LoadFile(const char *pathName, const char *fileName, cons
 {
 	if (!pathName || !fileName)
 		return false;
-	
-	char *fullPath = new char[strlen(pathName) + strlen(fileName) + 1];
-	strcpy (fullPath, pathName);
-	strcat (fullPath, fileName);
+
+	size_t path_len = strlen(pathName);
+	size_t file_len = strlen(fileName);
+	char *fullPath = new char[path_len + file_len + 1];
+	fullPath[path_len+file_len] = 0;
+
+	strncpy (fullPath, pathName, path_len+1);
+	strncat (fullPath, fileName, file_len);
 
 	std::ifstream::pos_type fileSize;
 	std::ifstream file (fullPath, std::ios::in|std::ios::binary|std::ios::ate);

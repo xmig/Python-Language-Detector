@@ -12,7 +12,7 @@
 #include "options.h"
 
 
-#define UT_TOTAL_LANGUAGES 9
+#define UT_TOTAL_LANGUAGES 10
 #define UT_JAPANESE 0
 #define UT_CHINESE 1
 #define UT_KOREAN 2

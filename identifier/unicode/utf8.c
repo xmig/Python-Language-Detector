@@ -133,7 +133,7 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
 		}
 
 		/* does the sequence header tell us truth about length? */
-		if (lim - p <= n - 1) {
+		if ((size_t)(lim - p) <= (n - 1)) {
 			if ((flags & UTF8_IGNORE_ERROR) == 0)
 				return (0);
 			n = 1;
@@ -260,7 +260,7 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 		if (out == NULL)
 			continue;
 
-		if (lim - p <= n - 1)
+		if ((size_t)(lim - p) <= n - 1)
 			return (0);		/* no space left */
 
 		/* make it work under different endians */
@@ -272,39 +272,39 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 			break;
 
 		case 2:
-			p[1] = _NXT | oc[3] & 0x3f;
-			p[0] = _SEQ2 | (oc[3] >> 6) | ((oc[2] & 0x07) << 2);
+			p[1] = _NXT | (oc[3] & 0x3f);
+			p[0] = (u_char)(_SEQ2 | (oc[3] >> 6) | ((oc[2] & 0x07) << 2));
 			break;
 
 		case 3:
-			p[2] = _NXT | oc[3] & 0x3f;
-			p[1] = _NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2);
+			p[2] = _NXT | (oc[3] & 0x3f);
+			p[1] = (u_char)(_NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2));
 			p[0] = _SEQ3 | ((oc[2] & 0xf0) >> 4);
 			break;
 
 		case 4:
-			p[3] = _NXT | oc[3] & 0x3f;
-			p[2] = _NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2);
-			p[1] = _NXT | ((oc[2] & 0xf0) >> 4) |
-			    ((oc[1] & 0x03) << 4);
+			p[3] = _NXT | (oc[3] & 0x3f);
+			p[2] = (u_char)(_NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2));
+			p[1] = (u_char)(_NXT | ((oc[2] & 0xf0) >> 4) |
+			    ((oc[1] & 0x03) << 4));
 			p[0] = _SEQ4 | ((oc[1] & 0x1f) >> 2);
 			break;
 
 		case 5:
-			p[4] = _NXT | oc[3] & 0x3f;
-			p[3] = _NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2);
-			p[2] = _NXT | ((oc[2] & 0xf0) >> 4) |
-			    ((oc[1] & 0x03) << 4);
+			p[4] = _NXT | (oc[3] & 0x3f);
+			p[3] = (u_char)(_NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2));
+			p[2] = (u_char)(_NXT | ((oc[2] & 0xf0) >> 4) |
+			    ((oc[1] & 0x03) << 4));
 			p[1] = _NXT | (oc[1] >> 2);
-			p[0] = _SEQ5 | oc[0] & 0x03;
+			p[0] = _SEQ5 | (oc[0] & 0x03);
 			break;
 
 		case 6:
-			p[5] = _NXT | oc[3] & 0x3f;
-			p[4] = _NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2);
-			p[3] = _NXT | (oc[2] >> 4) | ((oc[1] & 0x03) << 4);
+			p[5] = _NXT | (oc[3] & 0x3f);
+			p[4] = (u_char)(_NXT | (oc[3] >> 6) | ((oc[2] & 0x0f) << 2));
+			p[3] = (u_char)(_NXT | (oc[2] >> 4) | ((oc[1] & 0x03) << 4));
 			p[2] = _NXT | (oc[1] >> 2);
-			p[1] = _NXT | oc[0] & 0x3f;
+			p[1] = _NXT | (oc[0] & 0x3f);
 			p[0] = _SEQ6 | ((oc[0] & 0x40) >> 6);
 			break;
 		}
